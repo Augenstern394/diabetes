@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SimSun', 'Microsoft YaHei', sans-serif;
+        }
+        
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: white !important;
+            }
+            
+            .resume-container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        body {
+            background: #f5f5f5;
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        
+        .resume-container {
+            width: 210mm; /* A4宽度 */
+            min-height: 297mm; /* A4高度 */
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 25mm 20mm; /* 打印边距 */
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        /* 头部区域 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #0066cc;
+        }
+        
+        .basic-info {
+            flex: 1;
+        }
+        
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .profession {
+            font-size: 18px;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 30px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-item i {
+            width: 20px;
+            color: #0066cc;
+            margin-right: 8px;
+        }
+        
+        .photo {
+            width: 120px;
+            height: 160px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+            overflow: hidden;
+        }
+        
+        .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* 主要内容区域 */
+        .section {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0066cc;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #0066cc;
+        }
+        
+        /* 求职意向 */
+        .job-target-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .target-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #0066cc;
+        }
+        
+        .target-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .target-value {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* 教育背景 */
+        .education-item, .experience-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .edu-header, .exp-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .edu-school, .exp-company {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .edu-date, .exp-date {
+            color: #0066cc;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .edu-major, .exp-position {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        /* 列表内容 */
+        .content-list {
+            padding-left: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .content-list li {
+            margin-bottom: 5px;
+            line-height: 1.6;
+        }
+        
+        /* 技能标签 */
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .skill-item {
+            background: #e8f0fe;
+            color: #0066cc;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid #d0e0ff;
+        }
+        
+        /* 荣誉列表 */
+        .honors-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .honor-item {
+            padding: 8px;
+            background: #fff8e6;
+            border-left: 3px solid #ff9900;
+            font-size: 14px;
+        }
+        
+        /* 自我评价 */
+        .self-evaluation {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.8;
+            border-left: 3px solid #0066cc;
+        }
+        
+        /* 打印按钮 */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .print-btn:hover {
+            background: #0052a3;
+        }
+        
+        /* 分页控制 */
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* 确保一页内显示 */
+        @media screen {
+            .resume-container {
+                margin: 20px auto;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">
+        <i class="fas fa-print"></i> 打印简历
+    </button>
+    
+    <div class="resume-container">
+        <!-- 头部信息 -->
+        <div class="header">
+            <div class="basic-info">
+                <div class="name">陈宇哲</div>
+                <div class="profession">智能医学工程 | 本科</div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>13521966641</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>13521966641@163.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>辽宁何氏医学院</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>2023届</span>
+                    </div>
+                </div>
+            </div>
+            <div class="photo">
+                <img src="./222.jpg" alt="个人照片">
+            </div>
+        </div>
+        
+        <!-- 求职意向 -->
+        <div class="section">
+            <div class="section-title">求职意向</div>
+            <div class="job-target-grid">
+                <div class="target-item">
+                    <div class="target-label">目标职位</div>
+                    <div class="target-value">运动康复师</div>
+                </div>
+                <div class="target-item">
+                    <div class="target-label">期望薪资</div>
+                    <div class="target-value">2000-3500元</div>
+                </div>
+                <div class="target-item">
+                    <div class="target-label">工作地点</div>
+                    <div class="target-value">北京</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 教育背景 -->
+        <div class="section">
+            <div class="section-title">教育背景</div>
+            <div class="education-item">
+                <div class="edu-header">
+                    <div class="edu-school">辽宁何氏医学院</div>
+                    <div class="edu-date">2023.09 - 2027.06</div>
+                </div>
+                <div class="edu-major">智能医学工程 | 本科</div>
+                <ul class="content-list">
+                    <li>主修课程：生理学、临床医学概论、人体解剖学、医学图像处理、生物力学</li>
+                    <li>修读人体解剖微专业，系统掌握人体结构与器官毗邻关系</li>
+                    <li>GPA：3.5/4.0（前两学年）</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 实践经历 -->
+        <div class="section">
+            <div class="section-title">实践经历</div>
+            <div class="experience-item">
+                <div class="exp-header">
+                    <div class="exp-company">医学标本解剖实践项目</div>
+                    <div class="exp-date">2024.09</div>
+                </div>
+                <div class="exp-position">在校实践 | 解剖操作员</div>
+                <ul class="content-list">
+                    <li>通过系统解剖、局部解剖顺序学习人体器官形态与毗邻关系</li>
+                    <li>结合断面标本理解人体层次结构，掌握理论对照实物的学习方法</li>
+                    <li>动手分离辨认器官组织，记录形态特点与个体变异情况</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 专业技能 -->
+        <div class="section">
+            <div class="section-title">专业技能</div>
+            <div class="skills">
+                <div class="skill-item">人体结构与生物力学精解</div>
+                <div class="skill-item">智能康复设备应用</div>
+                <div class="skill-item">康复数据分析能力</div>
+                <div class="skill-item">循证康复方案制定</div>
+                <div class="skill-item">个性化康复干预</div>
+                <div class="skill-item">医学图像处理基础</div>
+            </div>
+        </div>
+        
+        <!-- 所获荣誉 -->
+        <div class="section">
+            <div class="section-title">所获荣誉</div>
+            <div class="honors-list">
+                <div class="honor-item">大学英语四级（CET-4）</div>
+                <div class="honor-item">普通话二级甲等证书</div>
+                <div class="honor-item">2024年2月 学习进步奖</div>
+
+            </div>
+        </div>
+        
+        <!-- 自我评价 -->
+        <div class="section">
+            <div class="section-title">自我评价</div>
+            <div class="self-evaluation">
+                智能医学工程专业学生，目标成为运动康复师。具备扎实的人体解剖、生理学基础，掌握运动康复专业知识。同时拥有工科思维与技术能力，善于利用数据分析、智能设备优化康复方案。致力于将工程技术转化为临床工具，帮助患者恢复功能、提升生活质量。做事认真负责，有良好的学习能力和团队协作精神。
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 打印优化
+        window.onbeforeprint = function() {
+            // 移除打印按钮
+            document.querySelector('.print-btn').style.display = 'none';
+        };
+        
+        window.onafterprint = function() {
+            // 恢复打印按钮
+            document.querySelector('.print-btn').style.display = 'block';
+        };
+        
+        // 检查内容是否超出一页
+        function checkPageLength() {
+            const container = document.querySelector('.resume-container');
+            const containerHeight = container.offsetHeight;
+            const a4Height = 297 * 3.78; // 297mm转换为像素
+            
+            if (containerHeight > a4Height) {
+                console.log('内容可能超出一页，建议调整');
+            }
+        }
+        
+        // 页面加载完成后检查
+        window.addEventListener('load', checkPageLength);
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+ * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            list-style: none;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            /*  */
+            background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+            background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
+        }
+
+        .shell {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 130px 0;
+        }
+
+        .carousel {
+            position: relative;
+            width: 520px;
+            height: 500px;
+            padding-top: 150px;
+            perspective: 300px;
+        }
+
+        .arrows {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            position: absolute;
+            right: 15px;
+        }
+
+        .up,
+        .next {
+            margin: 5px 0;
+            padding: 5px;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgb(255, 255, 255);
+            border-radius: 10px;
+            background-color: #ffffff61;
+            color: #fff;
+            transition: .3s;
+        }
+
+        .up:hover,
+        .next:hover {
+            background-color: #fff;
+            color: #9795f0;
+        }
+
+        .boxs {
+            width: 100%;
+            height: 210px;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: 1s;
+        }
+
+        .box {
+            position: absolute;
+            width: 520px;
+            height: 200px;
+            border: 2px solid white;
+            border-radius: 10px;
+            overflow: hidden;
+            opacity: .7;
+        }
+
+        .box img {
+            width: 100%;
+            transform: translateY(-50px);
+        }
+
+        .box.selected {
+            border-color: goldenrod;
+            border-width: 5px;
+            opacity: 1;
+        }

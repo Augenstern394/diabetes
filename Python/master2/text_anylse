@@ -1,0 +1,29 @@
+master2:糖尿病预测分析与可视化
+    datasets：
+        diabetes.csv    原数据集
+        feature_engineered_pima.csv        特征工程后的数据集
+        process_pima.csv        预处理后的数据集
+
+    notebooks:
+        pro_processing.ipynb        数据预处理操作
+        EDA.ipynb               数据探索性分析，含可视图表
+        feature_engineer.ipynb      特征工程
+
+    model_train:
+        train.ipynb         模型训练与预测
+
+    report:
+        存放结果报告
+
+
+
+diabetes.csv 原数据集的字段说明
+    Pregnancies         表示患者怀孕的次数(次)
+    Glucose             进行口服葡萄糖耐量测试后2小时的血浆葡萄糖浓度
+    BloodPressure       舒张压 （mm Hg）
+    SkinThickness       肱三头肌皮褶厚度，用于评估身体脂肪（mm）  
+    Insulin             进行口服葡萄糖耐量测试后2小时的血清胰岛素水平（mm）   
+    BMI                 体重指数       
+    DiabetesPedigreeFunction    糖尿病家系作用
+    Age                  年龄   
+    Outcome             标签 0为不发病 1为发病

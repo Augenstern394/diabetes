@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能计划表</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 15px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-top: 10px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .input-section {
+            position: relative;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: var(--light);
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #e1156f;
+        }
+        
+        .plans-container {
+            position: relative;
+        }
+        
+        .plan-item {
+            padding: 18px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: var(--transition);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .plan-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .plan-content {
+            flex: 1;
+            padding-right: 15px;
+        }
+        
+        .plan-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .plan-details {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .plan-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: var(--transition);
+            color: var(--gray);
+        }
+        
+        .action-btn:hover {
+            background-color: #f1f3f5;
+            color: var(--dark);
+        }
+        
+        .delete-btn:hover {
+            color: var(--danger);
+        }
+        
+        .complete-btn:hover {
+            color: var(--success);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #dee2e6;
+        }
+        
+        .filter-section {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        
+        .filter-btn {
+            background-color: #e9ecef;
+            color: var(--dark);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .priority-high {
+            border-left: 5px solid var(--danger);
+        }
+        
+        .priority-medium {
+            border-left: 5px solid var(--warning);
+        }
+        
+        .priority-low {
+            border-left: 5px solid var(--success);
+        }
+        
+        .completed {
+            opacity: 0.7;
+            background-color: #f8f9fa;
+        }
+        
+        .completed .plan-title {
+            text-decoration: line-through;
+        }
+        
+        .date-display {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .category-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .category-work {
+            background-color: #e0f7fa;
+            color: #006064;
+        }
+        
+        .category-personal {
+            background-color: #f3e5f5;
+            color: #4a148c;
+        }
+        
+        .category-health {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+        }
+        
+        .category-other {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+        
+        .stats-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            flex: 1;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            padding-left: 45px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        @media (max-width: 480px) {
+            .plan-item {
+                flex-direction: column;
+            }
+            
+            .plan-actions {
+                margin-top: 12px;
+                align-self: flex-end;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+            }
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>智能计划表</h1>
+            <p class="subtitle">高效管理您的每日任务</p>
+        </header>
+        
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-value" id="totalPlans">0</div>
+                <div class="stat-label">总计划</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="completedPlans">0</div>
+                <div class="stat-label">已完成</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pendingPlans">0</div>
+                <div class="stat-label">待完成</div>
+            </div>
+        </div>
+        
+        <div class="card input-section">
+            <div class="tabs">
+                <div class="tab active" data-tab="add">添加计划</div>
+                <div class="tab" data-tab="search">搜索计划</div>
+            </div>
+            
+            <div id="add-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="planTitle">计划标题</label>
+                    <input type="text" id="planTitle" placeholder="输入计划标题">
+                </div>
+                
+                <div class="form-group">
+                    <label for="planDescription">计划描述</label>
+                    <textarea id="planDescription" placeholder="输入计划描述（可选）"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="planCategory">分类</label>
+                    <select id="planCategory">
+                        <option value="work">工作</option>
+                        <option value="personal" selected>个人</option>
+                        <option value="health">健康</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="planDate">计划日期</label>
+                    <input type="date" id="planDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="planPriority">优先级</label>
+                    <select id="planPriority">
+                        <option value="low">低优先级</option>
+                        <option value="medium" selected>中优先级</option>
+                        <option value="high">高优先级</option>
+                    </select>
+                </div>
+                
+                <button id="addPlanBtn" class="btn">
+                    <i class="fas fa-plus"></i> 添加计划
+                </button>
+            </div>
+            
+            <div id="search-tab" class="tab-content" style="display: none;">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="搜索计划...">
+                </div>
+                <div class="form-group">
+                    <label>排序方式</label>
+                    <select id="sortOption">
+                        <option value="date">按日期</option>
+                        <option value="priority">按优先级</option>
+                        <option value="title">按标题</option>
+                    </select>
+                </div>
+                <button id="exportBtn" class="btn btn-secondary">
+                    <i class="fas fa-download"></i> 导出数据
+                </button>
+            </div>
+        </div>
+        
+        <div class="card plans-container">
+            <div class="filter-section">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-list"></i> 全部
+                </button>
+                <button class="filter-btn" data-filter="today">
+                    <i class="fas fa-calendar-day"></i> 今天
+                </button>
+                <button class="filter-btn" data-filter="high">
+                    <i class="fas fa-exclamation-circle"></i> 高优先级
+                </button>
+                <button class="filter-btn" data-filter="pending">
+                    <i class="fas fa-clock"></i> 待完成
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                    <i class="fas fa-check-circle"></i> 已完成
+                </button>
+            </div>
+            
+            <div id="plansList">
+                <!-- 计划项将动态添加到这里 -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const planTitleInput = document.getElementById('planTitle');
+            const planDescriptionInput = document.getElementById('planDescription');
+            const planDateInput = document.getElementById('planDate');
+            const planPrioritySelect = document.getElementById('planPriority');
+            const planCategorySelect = document.getElementById('planCategory');
+            const addPlanBtn = document.getElementById('addPlanBtn');
+            const plansList = document.getElementById('plansList');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('searchInput');
+            const sortOption = document.getElementById('sortOption');
+            const exportBtn = document.getElementById('exportBtn');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const notification = document.getElementById('notification');
+            const totalPlansEl = document.getElementById('totalPlans');
+            const completedPlansEl = document.getElementById('completedPlans');
+            const pendingPlansEl = document.getElementById('pendingPlans');
+            
+            // 设置默认日期为今天
+            const today = new Date().toISOString().split('T')[0];
+            planDateInput.value = today;
+            
+            // 从localStorage加载计划
+            let plans = JSON.parse(localStorage.getItem('plans')) || [];
+            
+            // 初始化显示
+            updateStats();
+            renderPlans(plans);
+            
+            // 标签切换
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // 更新活动标签
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 显示对应内容
+                    tabContents.forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    document.getElementById(`${tabId}-tab`).style.display = 'block';
+                });
+            });
+            
+            // 添加计划事件
+            addPlanBtn.addEventListener('click', function() {
+                const title = planTitleInput.value.trim();
+                const description = planDescriptionInput.value.trim();
+                const date = planDateInput.value;
+                const priority = planPrioritySelect.value;
+                const category = planCategorySelect.value;
+                
+                if (!title) {
+                    showNotification('请输入计划标题', 'error');
+                    return;
+                }
+                
+                const newPlan = {
+                    id: Date.now(),
+                    title,
+                    description,
+                    date,
+                    priority,
+                    category,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+                
+                plans.push(newPlan);
+                savePlans();
+                renderPlans(plans);
+                updateStats();
+                
+                // 清空输入
+                planTitleInput.value = '';
+                planDescriptionInput.value = '';
+                planDateInput.value = today;
+                planPrioritySelect.value = 'medium';
+                planCategorySelect.value = 'personal';
+                
+                showNotification('计划添加成功！', 'success');
+            });
+            
+            // 过滤计划事件
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 更新活动按钮
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 根据过滤条件显示计划
+                    const filter = this.getAttribute('data-filter');
+                    filterPlans(filter);
+                });
+            });
+            
+            // 搜索计划
+            searchInput.addEventListener('input', function() {
+                filterPlans('search', this.value);
+            });
+            
+            // 排序计划
+            sortOption.addEventListener('change', function() {
+                renderPlans(plans);
+            });
+            
+            // 导出数据
+            exportBtn.addEventListener('click', function() {
+                const dataStr = JSON.stringify(plans, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(dataBlob);
+                link.download = 'plans-backup.json';
+                link.click();
+                
+                showNotification('数据导出成功！', 'success');
+            });
+            
+            // 过滤和显示计划
+            function filterPlans(filter, searchTerm = '') {
+                let filteredPlans = [...plans];
+                
+                if (filter === 'today') {
+                    filteredPlans = plans.filter(plan => plan.date === today);
+                } else if (filter === 'high') {
+                    filteredPlans = plans.filter(plan => plan.priority === 'high');
+                } else if (filter === 'pending') {
+                    filteredPlans = plans.filter(plan => !plan.completed);
+                } else if (filter === 'completed') {
+                    filteredPlans = plans.filter(plan => plan.completed);
+                } else if (filter === 'search') {
+                    filteredPlans = plans.filter(plan => 
+                        plan.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        plan.description.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+                }
+                
+                renderPlans(filteredPlans);
+            }
+            
+            // 渲染计划列表
+            function renderPlans(plansToRender) {
+                if (plansToRender.length === 0) {
+                    plansList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="far fa-calendar-plus"></i>
+                            <h3>暂无计划</h3>
+                            <p>添加您的第一个计划开始管理时间</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 排序
+                const sortBy = sortOption.value;
+                plansToRender.sort((a, b) => {
+                    if (sortBy === 'date') {
+                        return new Date(a.date) - new Date(b.date);
+                    } else if (sortBy === 'priority') {
+                        const priorityOrder = { high: 3, medium: 2, low: 1 };
+                        return priorityOrder[b.priority] - priorityOrder[a.priority];
+                    } else if (sortBy === 'title') {
+                        return a.title.localeCompare(b.title);
+                    }
+                    return 0;
+                });
+                
+                plansList.innerHTML = '';
+                
+                plansToRender.forEach(plan => {
+                    const planElement = document.createElement('div');
+                    planElement.className = `plan-item priority-${plan.priority} ${plan.completed ? 'completed' : ''}`;
+                    
+                    const formattedDate = formatDate(plan.date);
+                    const categoryText = getCategoryText(plan.category);
+                    const categoryClass = `category-${plan.category}`;
+                    
+                    planElement.innerHTML = `
+                        <div class="plan-content">
+                            <div class="plan-title">
+                                ${plan.title}
+                                <span class="category-tag ${categoryClass}">${categoryText}</span>
+                            </div>
+                            ${plan.description ? `<div class="plan-details">${plan.description}</div>` : ''}
+                            <div class="date-display">
+                                <i class="far fa-calendar"></i> ${formattedDate}
+                            </div>
+                        </div>
+                        <div class="plan-actions">
+                            <button class="action-btn complete-btn" data-id="${plan.id}" title="${plan.completed ? '标记为未完成' : '标记为完成'}">
+                                <i class="fas ${plan.completed ? 'fa-undo' : 'fa-check'}"></i>
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${plan.id}" title="删除计划">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    plansList.appendChild(planElement);
+                    
+                    // 添加删除事件
+                    const deleteBtn = planElement.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        if (confirm('确定要删除这个计划吗？')) {
+                            plans = plans.filter(plan => plan.id !== id);
+                            savePlans();
+                            renderPlans(plans);
+                            updateStats();
+                            showNotification('计划已删除', 'info');
+                        }
+                    });
+                    
+                    // 添加完成/取消完成事件
+                    const completeBtn = planElement.querySelector('.complete-btn');
+                    completeBtn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        const planIndex = plans.findIndex(plan => plan.id === id);
+                        if (planIndex !== -1) {
+                            plans[planIndex].completed = !plans[planIndex].completed;
+                            savePlans();
+                            renderPlans(plans);
+                            updateStats();
+                            showNotification(plans[planIndex].completed ? '计划已完成！' : '计划标记为未完成', 'success');
+                        }
+                    });
+                });
+            }
+            
+            // 保存计划到localStorage
+            function savePlans() {
+                localStorage.setItem('plans', JSON.stringify(plans));
+            }
+            
+            // 更新统计信息
+            function updateStats() {
+                const total = plans.length;
+                const completed = plans.filter(plan => plan.completed).length;
+                const pending = total - completed;
+                
+                totalPlansEl.textContent = total;
+                completedPlansEl.textContent = completed;
+                pendingPlansEl.textContent = pending;
+            }
+            
+            // 格式化日期显示
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                
+                if (date.toDateString() === today.toDateString()) {
+                    return '今天';
+                } else if (date.toDateString() === tomorrow.toDateString()) {
+                    return '明天';
+                } else {
+                    return date.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+                }
+            }
+            
+            // 获取分类文本
+            function getCategoryText(category) {
+                const categories = {
+                    work: '工作',
+                    personal: '个人',
+                    health: '健康',
+                    other: '其他'
+                };
+                return categories[category] || '其他';
+            }
+            
+            // 显示通知
+            function showNotification(message, type = 'info') {
+                notification.textContent = message;
+                notification.className = 'notification';
+                
+                // 添加类型样式
+                if (type === 'success') {
+                    notification.style.backgroundColor = '#28a745';
+                } else if (type === 'error') {
+                    notification.style.backgroundColor = '#dc3545';
+                } else if (type === 'warning') {
+                    notification.style.backgroundColor = '#ffc107';
+                    notification.style.color = '#212529';
+                } else {
+                    notification.style.backgroundColor = '#17a2b8';
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

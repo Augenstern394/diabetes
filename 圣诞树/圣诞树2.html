@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>圣诞树</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f2f2f2;
+    }
+    
+    .tree {
+      font-family: "Arial", sans-serif;
+      font-size: 24px;
+      color: #333;
+      text-align: center;
+    }
+    
+    .tree span {
+      display: block;
+    }
+    
+    .tree .trunk {
+      color: #666;
+      font-size: 18px;
+    }
+    
+    .tree .trunk::before {
+      content: "―";
+      margin-right: 4px;
+    }
+    
+    .tree .trunk span {
+      display: inline-block;
+      padding-left: 4px;
+    }
+    
+    .tree .trunk span:first-child {
+      padding-left: 0;
+    }
+    
+    .tree .decorations {
+      color: #999;
+      font-size: 12px;
+      text-align: center;
+    }
+    
+    .decorations div {
+      display: inline-block;
+      margin: 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #c0c0c0;
+    }
+  </style>
+</head>
+<body>
+  <div class="tree">
+    <span>树上挂满了</span>
+    <div class="trunk">
+      <span>苹果</span>
+      <span>糖果</span>
+      <span>礼物</span>
+    </div>
+    <span>和</span>
+    <div class="trunk">
+      <span>星星</span>
+      <span>彩带</span>
+      <span>雪球</span>
+    </div>
+    <span>以及其他装饰品</span>
+  </div>
+  <div class="decorations">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="decorations">祝你圣诞快乐！</div>
+</body>
+</html>

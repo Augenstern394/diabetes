@@ -1,0 +1,158 @@
+body {
+    font-family: 'Microsoft YaHei', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+    overflow: hidden;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 1;
+}
+
+.cover, .intro, .education, .experience, .projects, .skills, .evaluation, .back-cover {
+    text-align: center;
+    padding: 20px;
+    max-width: 800px;
+    width: 90%;
+}
+
+.cover h1 {
+    font-size: 48px;
+    color: #007acc;
+    margin-bottom: 10px;
+}
+
+.cover h2 {
+    font-size: 36px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.cover p {
+    font-size: 18px;
+    color: #999;
+}
+
+.intro .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.photo-placeholder {
+    width: 150px;
+    height: 200px;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #007acc;
+    border-radius: 10px;
+}
+
+.intro p {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.education p, .experience p, .projects p, .skills p, .evaluation p {
+    margin: 10px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+.job, .project {
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.job h3, .project h3 {
+    color: #007acc;
+    margin-bottom: 10px;
+}
+
+.skills ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.skills li {
+    margin: 5px 0;
+}
+
+.evaluation p {
+    margin: 15px 0;
+    text-align: left;
+}
+
+.back-cover h2 {
+    font-size: 36px;
+    color: #007acc;
+}
+
+.back-cover p {
+    font-size: 18px;
+    color: #666;
+}
+
+.navigation {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px 20px;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007acc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #005a99;
+}
+
+#page-indicator {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}

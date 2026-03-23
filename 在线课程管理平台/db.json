@@ -1,0 +1,106 @@
+{
+    "courses": [
+        {
+            "id": 1,
+            "name": "JavaScript基础",
+            "category": "编程",
+            "teacher": "张老师",
+            "price": 99,
+            "isFree": false,
+            "date": "2023-01-01",
+            "evaluations": [
+              {
+                "user": "学生A",
+                "score": 5,
+                "comment": "课程内容丰富，老师讲解清晰！"
+              }
+              
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Python编程入门",
+            "category": "编程",
+            "teacher": "李老师",
+            "price": 129,
+            "isFree": false,
+            "date": "2023-02-15",
+            "evaluations": [
+            {
+                "user": "学生B",
+                "score": 4.5,
+                "comment": "课程内容实用，适合初学者入门！"
+            },
+            {
+                "user": "学生C",
+                "score": 5,
+                "comment": "老师讲解清晰，代码示例丰富！"
+            }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "数据结构与算法",
+            "category": "编程进阶",
+            "teacher": "王老师",
+            "price": 199,
+            "isFree": false,
+            "date": "2023-03-01",
+            "evaluations": [
+            {
+                "user": "学生D",
+                "score": 4,
+                "comment": "课程内容有点难，但老师解答耐心！"
+            },
+            {
+                "user": "学生E",
+                "score": 4.5,
+                "comment": "通过这门课程，我对数据结构和算法有了更深入的理解！"
+            }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "UI/UX设计基础",
+            "category": "设计",
+            "teacher": "赵老师",
+            "price": 89,
+            "isFree": true,
+            "date": "2023-04-10",
+            "evaluations": [
+            {
+                "user": "学生F",
+                "score": 5,
+                "comment": "课程非常适合设计初学者，老师讲解细致！"
+            },
+            {
+                "user": "学生G",
+                "score": 4.8,
+                "comment": "课程内容丰富，让我对UI/UX设计有了全面的认识！"
+            }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "市场营销策略",
+            "category": "商业管理",
+            "teacher": "刘老师",
+            "price": 299,
+            "isFree": false,
+            "date": "2023-05-05",
+            "evaluations": [
+            {
+                "user": "学生H",
+                "score": 4.2,
+                "comment": "课程理论与实践结合，对我帮助很大！"
+            },
+            {
+                "user": "学生I",
+                "score": 4.7,
+                "comment": "老师经验丰富，课程内容实用！"
+            }
+            ]
+        }
+      
+    ]
+  }

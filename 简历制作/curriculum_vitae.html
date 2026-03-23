@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>个人简历 - 专业版</title> -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9ff;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .resume-container {
+            width: 794px; /* A4宽度 */
+            height: 1123px; /* A4高度 */
+            background-color: white;
+            box-shadow: 0 5px 25px rgba(26, 58, 143, 0.15);
+            display: flex;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 左侧区域 - 占3/10 (30%) */
+        .left-column {
+            width: 30%;
+            background: linear-gradient(to bottom, #8d98b7, #4b5c81);
+            color: white;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* 左侧装饰 */
+        .left-column::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 120px 120px;
+            border-color: transparent transparent #445672 transparent;
+            z-index: 1;
+        }
+        
+        /* 右侧区域 - 占7/10 (70%) */
+        .right-column {
+            width: 70%;
+            padding: 45px 40px;
+            color: #edcbcb;
+            background-color: white;
+        }
+        
+        /* 照片区域 */
+        .photo-container {
+            width: 100%;
+            height: 240px;
+            background-color: #2c3b60;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        }
+        
+        .photo-placeholder {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background-color: #e8ecff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #1a3a8f;
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            position: relative;
+        }
+        
+        .photo-placeholder i {
+            font-size: 60px;
+            margin-bottom: 12px;
+        }
+        
+        .photo-placeholder p {
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+        
+        /* 左侧中间部分 - 自我评价 */
+        .self-evaluation {
+            padding: 35px 30px;
+            flex-grow: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 左侧底部 - 联系方式 */
+        .contact-info {
+            padding: 35px 30px;
+        }
+        
+        /* 左侧模块标题 */
+        .section-title-left {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title-left i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        /* 联系信息项目 */
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .contact-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .contact-icon i {
+            font-size: 16px;
+            color: white;
+        }
+        
+        .contact-content {
+            flex-grow: 1;
+        }
+        
+        .contact-label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #d0d9ff;
+        }
+        
+        .contact-value {
+            font-size: 14px;
+            color: white;
+            line-height: 1.5;
+        }
+        
+        /* 自我评价内容 */
+        .evaluation-content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #e8ecff;
+            text-align: justify;
+        }
+        
+        /* 右侧模块标题 */
+        .section-title-right {
+            color: #1a3a8f;
+            font-size: 22px;
+            font-weight: 700;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #1a3a8f;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .section-title-right i {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        
+        .section-title-right::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 70px;
+            height: 2px;
+            background-color: #ff7a45;
+        }
+        
+        /* 右侧模块 */
+        .right-section {
+            margin-bottom: 35px;
+        }
+        
+        /* 求职意向特殊样式 */
+        .job-intent-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        
+        .intent-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #e8f0ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .intent-icon i {
+            font-size: 18px;
+            color: #1a3a8f;
+        }
+        
+        .intent-content {
+            flex-grow: 1;
+        }
+        
+        .intent-label {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a3a8f;
+            margin-bottom: 4px;
+        }
+        
+        .intent-value {
+            font-size: 15px;
+            color: #444;
+        }
+        
+        /* 教育背景和实习经历 */
+        .edu-item, .exp-item {
+            margin-bottom: 25px;
+            padding-left: 10px;
+            border-left: 3px solid #e8f0ff;
+            padding-left: 20px;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .item-title {
+            font-weight: 700;
+            font-size: 17px;
+            color: #1a3a8f;
+        }
+        
+        .item-subtitle {
+            font-size: 15px;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .item-subtitle i {
+            margin-right: 8px;
+            color: #1a3a8f;
+            font-size: 14px;
+        }
+        
+        .item-date {
+            color: #1a3a8f;
+            font-weight: 600;
+            font-size: 14px;
+            background-color: #e8f0ff;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+        
+        .item-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .item-content ul {
+            padding-left: 20px;
+        }
+        
+        .item-content li {
+            margin-bottom: 6px;
+            position: relative;
+        }
+        
+        .item-content li::before {
+            content: "•";
+            color: #1a3a8f;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        
+        /* 专业技能样式 */
+        .skill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .skill-tag {
+            background-color: #e8f0ff;
+            color: #1a3a8f;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .skill-tag i {
+            margin-right: 8px;
+            font-size: 12px;
+        }
+        
+        /* 所获荣誉样式 */
+        .honor-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .honor-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .honor-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #fff8e6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .honor-icon i {
+            font-size: 18px;
+            color: #ffa940;
+        }
+        
+        .honor-content {
+            flex-grow: 1;
+        }
+        
+        .honor-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .honor-date {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .honor-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* 按钮样式 */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(to right, #1a3a8f, #2c5cc5);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(26, 58, 143, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #0d2a7a, #1a3a8f);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(26, 58, 143, 0.4);
+        }
+        
+        button i {
+            margin-right: 8px;
+        }
+        
+        #printBtn {
+            background: linear-gradient(to right, #2c5cc5, #4a7bff);
+        }
+        
+        /* 提示信息 */
+        .hint {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333;
+            max-width: 794px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #1a3a8f;
+        }
+        
+        .hint h3 {
+            color: #1a3a8f;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hint h3 i {
+            margin-right: 10px;
+        }
+        
+        .hint ul {
+            padding-left: 20px;
+        }
+        
+        .hint li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        /* 响应式调整 */
+        @media print {
+            body {
+                padding: 0;
+                background-color: white;
+            }
+            
+            .resume-container {
+                box-shadow: none;
+                margin: 0;
+            }
+            
+            .controls, .hint {
+                display: none;
+            }
+        }
+        
+        /* 装饰元素 */
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+        
+        .circle-1 {
+            width: 120px;
+            height: 120px;
+            top: 50px;
+            right: -40px;
+        }
+        
+        .circle-2 {
+            width: 80px;
+            height: 80px;
+            bottom: 120px;
+            left: -30px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 加载动画
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <div class="loader-text" id="loaderText">正在生成PDF...</div>
+    </div>
+    
+    状态提示
+    <div class="status-message" id="statusMessage"></div>
+    
+    控制按钮
+    <div class="controls">
+        <button class="control-btn" id="exportBtn">
+            <i class="fas fa-file-pdf"></i> 导出为PDF
+        </button>
+        <button class="control-btn" id="printBtn">
+            <i class="fas fa-print"></i> 打印简历
+        </button>
+        <button class="control-btn" id="previewBtn">
+            <i class="fas fa-eye"></i> 预览PDF
+        </button>
+        <button class="control-btn" id="downloadPngBtn">
+            <i class="fas fa-image"></i> 下载为图片
+        </button> -->
+    <!-- </div> -->
+    <div class="resume-container" id="resume">
+        <!-- 左侧区域 (30%) -->
+        <div class="left-column">
+            <!-- 左上：照片 -->
+            
+            <div class="photo-container">
+                
+                    <img src="./23240128.jpg" alt="",width="250px",height="250px">
+                
+            </div>
+            
+            <!-- 左中：自我评价 -->
+            <div class="self-evaluation">
+                <h3 class="section-title-left"><i class="fas fa-comment-dots"></i>自我评价</h3>
+                <div class="evaluation-content">
+                    <!-- 请在此处填写自我评价内容 -->
+                      作为一名智能医学工程专业学生，我坚定地走向运动康复师这一目标。我的优势在于，既能系统掌握人体解剖、生理与康复知识，为精准评估打下坚实基础；又具备工科思维与智能技术能力，善于利用数据分析、可穿戴设备等科技手段，优化康复方案，提升干预的个性化和效果。我渴望将工程技术转化为有温度的临床工具，切实帮助人们恢复功能、提升生活质量。
+                </div>
+            </div>
+            
+            <!-- 左下：联系方式 -->
+            <div class="contact-info">
+                <h3 class="section-title-left"><i class="fas fa-address-book"></i>联系方式</h3>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="contact-content">
+                        <div class="contact-label">联系电话</div>
+                        <div class="contact-value" id="phone">13521966641</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-content">
+                        <div class="contact-label">电子邮箱</div>
+                        <div class="contact-value" id="email">13521966641@163.com</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-content">
+                        <div class="contact-label">联系地址</div>
+                        <div class="contact-value" id="address">辽宁何氏医学院</div>
+                    </div>
+                </div>
+                
+                <!-- <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <div class="contact-content">
+                        <div class="contact-label">LinkedIn</div>
+                        <div class="contact-value" id="linkedin">请填写您的LinkedIn链接</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="contact-content">
+                        <div class="contact-label">个人网站/作品集</div>
+                        <div class="contact-value" id="portfolio">请填写您的个人网站或作品集链接</div>
+                    </div>
+                </div> -->
+            </div>
+            
+            <!-- 装饰圆圈 -->
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+        </div>
+        
+        <!-- 右侧区域 (70%) -->
+        <div class="right-column">
+            <!-- 个人信息和求职意向 -->
+            <div class="personal-header" style="margin-bottom: 30px;">
+                <h2 style="font-size: 25px; color: #1a3a8f; margin-bottom: 5px;" id="name">陈宇哲</h2>
+                <div style="font-size: 18px; color: #666; margin-bottom: 10px;" id="profession">智能医学工程</div>
+                <div style="font-size: 15px; color: #888; line-height: 1.6;" id="summary">
+                    
+                </div>
+            </div>
+            
+            <!-- 求职意向 -->
+            <div class="right-section">
+                <h3 class="section-title-right"><i class="fas fa-bullseye"></i>求职意向</h3>
+                
+                <div class="job-intent-item">
+                    <div class="intent-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="intent-content">
+                        <div class="intent-label">目标职位</div>
+                        <div class="intent-value" id="jobTarget">运动康复师</div>
+                    </div>
+                    <div class="intent-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="intent-content">
+                        <div class="intent-label">期望薪资</div>
+                        <div class="intent-value" id="salary">2000-3500</div>
+                    </div>
+                </div>
+                
+                <!-- <div class="job-intent-item">
+                    <div class="intent-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="intent-content">
+                        <div class="intent-label">期望薪资</div>
+                        <div class="intent-value" id="salary">3000-4000</div>
+                    </div>
+                </div> -->
+                
+                <div class="job-intent-item">
+                    <div class="intent-icon">
+                        <i class="fas fa-map-pin"></i>
+                    </div>
+                    <div class="intent-content">
+                        <div class="intent-label">工作地点</div>
+                        <div class="intent-value" id="workLocation">北京</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 教育背景 -->
+            <div class="right-section">
+                <h3 class="section-title-right"><i class="fas fa-graduation-cap"></i>教育背景</h3>
+                
+                <div class="edu-item">
+                    <div class="item-header">
+                        <div class="item-title" id="eduSchool">辽宁何氏医学院</div>
+                        <div class="item-date" id="eduDate">2023/9-2027/9</div>
+                    </div>
+                    <div class="item-subtitle">
+                        <i class="fas fa-book-open"></i> <span id="eduMajor">智能医学工程</span> | <span id="eduDegree">本科</span>
+                    </div>
+                    <div class="item-content">
+                        <ul>
+                            <li>主修课程：生理学、临床医学概论、人体解刨学、医学图像处理</li>
+                            <li>修读人体解刨微专业，掌握人体基本结构</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 实习/实践经历 -->
+            <div class="right-section">
+                <h3 class="section-title-right"><i class="fas fa-briefcase"></i>实践经历</h3>
+                
+                <div class="exp-item">
+                    <div class="item-header">
+                        <div class="item-title" id="expCompany">在校实践</div>
+                        <div class="item-date" id="expDate">2024/9</div>
+                    </div>
+                    <div class="item-subtitle">
+                        <i class="fas fa-user-tie"></i> <span id="expPosition">医学标本解刨与了解人体结构项目</span>
+                    </div>
+                    <div class="item-content">
+                        <ul>
+                            <li>医学标本解剖通过直接观察人体结构，学习器官形态与毗邻关系。可遵循系统解剖、局部解剖顺序，结合断面标本理解层次。注重理论对照实物，动手分离辨认，记录形态特点与变异。</li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 专业技能 -->
+            <div class="right-section">
+                <h3 class="section-title-right"><i class="fas fa-tools"></i>专业技能</h3>
+                
+                <div class="skill-container">
+                    <div class="skill-tag"><i class="fas fa-check-circle"></i> 人体结构与生物力学精解</div>
+                    <div class="skill-tag"><i class="fas fa-check-circle"></i> 智能康复设备与数据分析能力</div>
+                    <div class="skill-tag"><i class="fas fa-check-circle"></i> 融合循证康复与个性化方案制定</div>
+
+
+                </div>
+            </div>
+            
+            <!-- 所获荣誉/证书 -->
+            <div class="right-section">
+                <h3 class="section-title-right"><i class="fas fa-award"></i>所获荣誉</h3>
+                
+                <div class="item-content">
+                        <ul>
+                            <li>英语四级,普通话二级甲等</li>
+                            <li>2024.2获学习进步奖</li>
+
+                        </ul>
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        // 获取DOM元素
+        const resume = document.getElementById('resume');
+        const exportBtn = document.getElementById('exportBtn');
+        const printBtn = document.getElementById('printBtn');
+        const previewBtn = document.getElementById('previewBtn');
+        const downloadPngBtn = document.getElementById('downloadPngBtn');
+        const previewContainer = document.getElementById('previewContainer');
+        const pdfPreview = document.getElementById('pdfPreview');
+        const closePreview = document.getElementById('closePreview');
+        const loader = document.getElementById('loader');
+        const loaderText = document.getElementById('loaderText');
+        const statusMessage = document.getElementById('statusMessage');
+        const watermark = document.getElementById('watermark');
+        
+        // 显示状态消息
+        function showStatus(message, type = 'success') {
+            statusMessage.textContent = message;
+            statusMessage.style.background = type === 'success' ? '#4caf50' : 
+                                           type === 'error' ? '#f44336' : '#2196f3';
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 显示加载动画
+        function showLoader(text = '正在生成PDF...') {
+            loaderText.textContent = text;
+            loader.style.display = 'flex';
+        }
+        
+        // 隐藏加载动画
+        function hideLoader() {
+            loader.style.display = 'none';
+        }
+        
+        // 导出为PDF
+        exportBtn.addEventListener('click', async function() {
+            showLoader('正在生成PDF...');
+            
+            try {
+                // 添加水印
+                watermark.style.display = 'block';
+                
+                // 使用html2canvas将简历转换为canvas
+                const canvas = await html2canvas(resume, {
+                    scale: 2, // 提高分辨率
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    onclone: function(clonedDoc) {
+                        // 在克隆的文档中确保所有字体和样式正确
+                        const clonedResume = clonedDoc.getElementById('resume');
+                        clonedResume.style.boxShadow = 'none';
+                    }
+                });
+                
+                // 隐藏水印
+                watermark.style.display = 'none';
+                
+                // 创建PDF
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                
+                // 保存PDF文件
+                const timestamp = new Date().toISOString().slice(0, 10);
+                pdf.save(`个人简历_${timestamp}.pdf`);
+                
+                showStatus('PDF导出成功！');
+            } catch (error) {
+                console.error('导出PDF时出错:', error);
+                showStatus('导出失败，请重试', 'error');
+            } finally {
+                hideLoader();
+            }
+        });
+        
+        // 打印简历
+        printBtn.addEventListener('click', function() {
+            showLoader('正在准备打印...');
+            
+            // 设置打印样式
+            const originalStyles = {};
+            const elementsToHide = document.querySelectorAll('.controls, .preview-container, .status-message, .loader');
+            
+            elementsToHide.forEach(el => {
+                originalStyles[el.id || el.className] = el.style.display;
+                el.style.display = 'none';
+            });
+            
+            // 触发打印
+            window.print();
+            
+            // 恢复原始样式
+            elementsToHide.forEach(el => {
+                el.style.display = originalStyles[el.id || el.className] || '';
+            });
+            
+            hideLoader();
+            showStatus('打印窗口已打开');
+        });
+        
+        // 预览PDF
+        previewBtn.addEventListener('click', async function() {
+            showLoader('正在生成预览...');
+            previewContainer.style.display = 'block';
+            
+            try {
+                // 添加水印
+                watermark.style.display = 'block';
+                
+                // 生成预览图像
+                const canvas = await html2canvas(resume, {
+                    scale: 1.5,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+                
+                // 隐藏水印
+                watermark.style.display = 'none';
+                
+                // 将canvas转换为图像显示在预览区域
+                const imgData = canvas.toDataURL('image/png');
+                pdfPreview.innerHTML = `<img src="${imgData}" alt="简历预览" style="width:100%;">`;
+                
+                // 滚动到预览区域
+                previewContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                showStatus('PDF预览生成成功！');
+            } catch (error) {
+                console.error('生成预览时出错:', error);
+                showStatus('生成预览失败', 'error');
+            } finally {
+                hideLoader();
+            }
+        });
+        
+        // 下载为PNG图片
+        downloadPngBtn.addEventListener('click', async function() {
+            showLoader('正在生成图片...');
+            
+            try {
+                // 添加水印
+                watermark.style.display = 'block';
+                
+                const canvas = await html2canvas(resume, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+                
+                // 隐藏水印
+                watermark.style.display = 'none';
+                
+                // 创建下载链接
+                const link = document.createElement('a');
+                link.download = `个人简历_${new Date().toISOString().slice(0, 10)}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                showStatus('图片下载成功！');
+            } catch (error) {
+                console.error('下载图片时出错:', error);
+                showStatus('下载失败，请重试', 'error');
+            } finally {
+                hideLoader();
+            }
+        });
+        
+        // 关闭预览
+        closePreview.addEventListener('click', function() {
+            previewContainer.style.display = 'none';
+        });
+        
+        // 内容编辑示例（实际使用时可以移除）
+        document.addEventListener('dblclick', function(e) {
+            if (e.target.classList.contains('contact-value') || 
+                e.target.classList.contains('intent-value') ||
+                e.target.classList.contains('item-title') ||
+                e.target.classList.contains('item-subtitle') ||
+                e.target.classList.contains('item-content') ||
+                e.target.classList.contains('skill-tag') ||
+                e.target.classList.contains('honor-title') ||
+                e.target.classList.contains('honor-desc') ||
+                e.target.classList.contains('evaluation-content') ||
+                e.target.classList.contains('name') ||
+                e.target.classList.contains('profession') ||
+                e.target.classList.contains('summary')) {
+                
+                const element = e.target;
+                const originalText = element.textContent;
+                
+                // 创建输入框
+                const input = document.createElement('textarea');
+                input.value = originalText;
+                input.style.width = '100%';
+                input.style.height = '80px';
+                input.style.padding = '8px';
+                input.style.border = '2px solid #1a3a8f';
+                input.style.borderRadius = '4px';
+                input.style.fontSize = 'inherit';
+                input.style.fontFamily = 'inherit';
+                input.style.color = 'inherit';
+                input.style.background = '#fff';
+                input.style.resize = 'vertical';
+                
+                // 替换元素内容
+                element.innerHTML = '';
+                element.appendChild(input);
+                input.focus();
+                
+                // 保存编辑
+                function saveEdit() {
+                    element.textContent = input.value;
+                    showStatus('内容已更新');
+                }
+                
+                // 取消编辑
+                function cancelEdit() {
+                    element.textContent = originalText;
+                }
+                
+                // 处理按键事件
+                input.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                        event.preventDefault();
+                        saveEdit();
+                    } else if (event.key === 'Escape') {
+                        cancelEdit();
+                    }
+                });
+                
+                // 失去焦点时保存
+                input.addEventListener('blur', saveEdit);
+            }
+        });
+        
+        // 页面加载完成后显示提示
+        window.addEventListener('load', function() {
+            showStatus('简历编辑器已加载，双击任意文本可编辑内容', 'info');
+        });
+    </script>
+</body>
+</html>

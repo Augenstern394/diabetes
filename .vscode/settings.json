@@ -1,0 +1,10 @@
+{
+    "editor.fontSize": 20,
+    "python-envs.pythonProjects": [
+        {
+            "path": "Python/master2/model_train",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
+}

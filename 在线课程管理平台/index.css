@@ -1,0 +1,41 @@
+/* 基础样式 */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* 轮播图图片样式 */
+#carousel img {
+  height: 400px;
+  object-fit: cover;
+  width: 100%; /* 可选：确保图片适应容器宽度 */
+}
+
+/* 菜单样式（三级菜单示例） */
+#menu {
+  background-color: #f8f9fa; /* 背景色 */
+  padding: 10px; /* 内边距 */
+  border-radius: 5px; /* 圆角 */
+  /* 可以继续添加其他样式 */
+}
+
+/* 标签页样式 */
+#tabs {
+  margin-bottom: var(--spacing-medium, 20px); /* 使用CSS变量 */
+}
+
+/* 标签页内容样式 */
+.tab-content {
+  margin-top: var(--spacing-medium, 20px); /* 使用相同的CSS变量 */
+}
+
+/* 日期选择器样式 */
+#date-picker {
+  margin-bottom: var(--spacing-medium, 20px); /* 同样使用CSS变量 */
+}
+
+/* CSS变量定义（在CSS文件的顶部或适当位置） */
+:root {
+  --spacing-medium: 20px; /* 中等间距变量 */
+  /* 可以定义其他变量 */
+}
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学生成绩可视化分析系统</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>学生成绩可视化分析系统</h1>
+      <div class="controls">
+        <button id="refreshBtn">刷新数据</button>
+        <button id="addStudentBtn">添加学生</button>
+      </div>
+    </header>
+    
+    <div class="stats-container">
+      <div class="stat-card">
+        <h3>班级平均分</h3>
+        <div id="overallAvg" class="stat-value">--</div>
+      </div>
+      <div class="stat-card">
+        <h3>语文平均</h3>
+        <div id="chineseAvg" class="stat-value">--</div>
+      </div>
+      <div class="stat-card">
+        <h3>数学平均</h3>
+        <div id="mathAvg" class="stat-value">--</div>
+      </div>
+      <div class="stat-card">
+        <h3>英语平均</h3>
+        <div id="englishAvg" class="stat-value">--</div>
+      </div>
+      <div class="stat-card">
+        <h3>班级第一名</h3>
+        <div id="topStudent" class="stat-value">--</div>
+      </div>
+    </div>
+    
+    <div class="chart-container">
+      <div id="averageChart" class="chart"></div>
+      <div id="subjectChart" class="chart"></div>
+      <div id="rankChart" class="chart"></div>
+      <div id="distributionChart" class="chart"></div>
+    </div>
+    
+    <div class="data-table">
+      <h2>学生成绩明细</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>排名</th>
+            <th>姓名</th>
+            <th>语文</th>
+            <th>数学</th>
+            <th>英语</th>
+            <th>平均分</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody">
+          <!-- 数据将通过JavaScript动态填充 -->
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 添加学生弹窗 -->
+    <div id="addStudentModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>添加新学生</h2>
+        <form id="addStudentForm">
+          <div class="form-group">
+            <label for="studentName">姓名:</label>
+            <input type="text" id="studentName" required>
+          </div>
+          <div class="form-group">
+            <label for="chineseScore">语文成绩:</label>
+            <input type="number" id="chineseScore" min="0" max="100" required>
+          </div>
+          <div class="form-group">
+            <label for="mathScore">数学成绩:</label>
+            <input type="number" id="mathScore" min="0" max="100" required>
+          </div>
+          <div class="form-group">
+            <label for="englishScore">英语成绩:</label>
+            <input type="number" id="englishScore" min="0" max="100" required>
+          </div>
+          <button type="submit">提交</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
